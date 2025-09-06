@@ -67,8 +67,6 @@ jobs:
             clang lld llvm gcc-aarch64-linux-gnu gcc-arm-linux-gnueabi \
             python3 python3-pip ninja-build zip
           sudo ln -sf /usr/bin/ld.lld /usr/bin/ld || true
-          chmod +x prepare_compiler.sh
-          chmod +x clang.sh
           ./prepare_compiler.sh
       - name: Build NonKSU kernel and log output
         if: inputs.build == 'NonKSU'
