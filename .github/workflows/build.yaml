@@ -48,7 +48,13 @@ jobs:
           echo "CLANG_TRIPLE=$(pwd)/gcc/bin/aarch64-linux-gnu-" >> $GITHUB_ENV
       - name: Clone Kernel Repo
         run: |
-          git clone ${{ inputs.kernel }} ./
+          git clone ${{ inputs.kernel }} kernel
+          rm -rf .git
+          rm -rf .github
+          if [ -d kernel/ksu/ ]; then
+            rm -rf ksu
+          fi
+          mv kernel/* ./
       - name: Init submodules
         if: inputs.build == 'KSU'
         run: git submodule update --init --recursive
