@@ -27,8 +27,8 @@ on:
         type: choice
         default: "No"
         options:
-          - Yes
           - No
+          - Yes
     push:
       branches: 
         - main
@@ -45,7 +45,7 @@ jobs:
         run: |
           echo "ARCH=arm64" >> $GITHUB_ENV
           echo "CC=$(pwd)/clang/bin/clang" >> $GITHUB_ENV
-          echo "CLANG_TRIPLE=$(pwd)/gcc/bin/aarch64-linux-gnu-" >> $GITHUB_ENV
+          echo "CLANG_TRIPLE=$(pwd)/gcc-linaro-13.0.0-2022.10-x86_64_arm-linux-gnueabihf/bin/aarch64-linux-gnu-" >> $GITHUB_ENV
       - name: Clone Kernel Repo
         run: |
           git clone ${{ inputs.kernel }} kernel_dir
