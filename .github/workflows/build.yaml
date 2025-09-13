@@ -75,6 +75,7 @@ jobs:
         run: |
           mkdir -p out
           make O=out ARCH=$ARCH CC=$CC ${{ inputs.config }}
+          cp -af out/.config out/output_config
           ./clang.sh | tee build.log
       - name: Apply SUSFS patch
         if: inputs.build == 'KSU' && inputs.susfs == 'Yes'
@@ -86,6 +87,7 @@ jobs:
         run: |
           mkdir -p out
           make O=out ARCH=$ARCH CC=$CC ${{ inputs.config }}
+          cp -af out/.config out/output_config
           chmod +x ksu/applyPatches.sh
           ./ksu/applyPatches.sh
           ./clang.sh | tee build.log
@@ -96,4 +98,5 @@ jobs:
           path: |
             out/arch/arm64/boot/Image.gz
             out/arch/arm64/boot/dts/
+            out/output_config
             build.log
