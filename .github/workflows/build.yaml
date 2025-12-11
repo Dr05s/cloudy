@@ -10,6 +10,18 @@ on:
       kernel:
         description: 'Kernel Repo URL'
         require: true
+      gcc:
+        description: 'GCC Download URL'
+        require: true
+      compression:
+        description: 'GCC Compression type'
+        require: true
+        type: choice
+        default: "zip"
+        options:
+          - zip
+          - tar.gz
+          - tar.xz
       config:
         description: 'Defconfig Filename'
         require: true
@@ -45,7 +57,7 @@ jobs:
         run: |
           echo "ARCH=arm64" >> $GITHUB_ENV
           echo "CC=$(pwd)/clang/bin/clang" >> $GITHUB_ENV
-          echo "CLANG_TRIPLE=$(pwd)/gcc-linaro-13.0.0-2022.10-x86_64_arm-linux-gnueabihf/bin/aarch64-linux-gnu-" >> $GITHUB_ENV
+          echo "CLANG_TRIPLE=$(pwd)/gcc/bin/aarch64-linux-gnu-" >> $GITHUB_ENV
       - name: Clone Kernel Repo
         run: |
           git clone ${{ inputs.kernel }} kernel_dir
@@ -69,7 +81,7 @@ jobs:
           sudo ln -sf /usr/bin/ld.lld /usr/bin/ld || true
           chmod +x prepare_compiler.sh
           chmod +x clang.sh
-          ./prepare_compiler.sh
+          ./prepare_compiler.sh ${{ inputs.gcc }} ${{ inputs.compression }}
       - name: Build NonKSU kernel and log output
         if: inputs.build == 'NonKSU'
         run: |
