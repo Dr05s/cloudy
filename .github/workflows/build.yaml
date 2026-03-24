@@ -25,6 +25,13 @@ on:
       config:
         description: 'Defconfig Filename'
         require: true
+      action:
+        description: 'What's job do you want to running?'
+        require: true
+        type: choice
+        options:
+          - build
+          - config
       build:
         description: "Build type"
         required: true
@@ -83,7 +90,7 @@ jobs:
           chmod +x clang.sh
           ./prepare_compiler.sh ${{ inputs.gcc }} ${{ inputs.compression }}
       - name: Build NonKSU kernel and log output
-        if: inputs.build == 'NonKSU'
+        if: inputs.build == 'NonKSU' && inputs.action == 'build'
         run: |
           mkdir -p out
           make O=out ARCH=$ARCH CC=$CC ${{ inputs.config }}
@@ -95,7 +102,7 @@ jobs:
           cd KernelSU
           patch -p1 < ksu/patches/0000-enable-susfs-for-ksu.patch
       - name: Build KSU kernel and log output
-        if: inputs.build == 'KSU'
+        if: inputs.build == 'KSU' && inputs.action == 'build' && inputs.action == 'build'
         run: |
           mkdir -p out
           make O=out ARCH=$ARCH CC=$CC ${{ inputs.config }}
@@ -103,6 +110,12 @@ jobs:
           chmod +x ksu/applyPatches.sh
           ./ksu/applyPatches.sh
           ./clang.sh | tee build.log
+      - name: Make defconfig file
+        if: inputs.action == 'config'
+        run: |
+          mkdir -p out
+          make O=out ARCH=$ARCH CC=$CC ${{ inputs.config }}
+          cp -af out/.config out/output_config
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
