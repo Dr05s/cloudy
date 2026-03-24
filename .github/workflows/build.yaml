@@ -26,7 +26,7 @@ on:
         description: 'Defconfig Filename'
         require: true
       goals:
-        description: 'What's job do you want to running?'
+        description: 'What is job do you want to running?'
         require: true
         type: choice
         options:
