@@ -25,7 +25,7 @@ on:
       config:
         description: 'Defconfig Filename'
         require: true
-      action:
+      goals:
         description: 'What's job do you want to running?'
         require: true
         type: choice
@@ -90,7 +90,7 @@ jobs:
           chmod +x clang.sh
           ./prepare_compiler.sh ${{ inputs.gcc }} ${{ inputs.compression }}
       - name: Build NonKSU kernel and log output
-        if: inputs.build == 'NonKSU' && inputs.action == 'build'
+        if: inputs.build == 'NonKSU' && inputs.goals == 'build'
         run: |
           mkdir -p out
           make O=out ARCH=$ARCH CC=$CC ${{ inputs.config }}
@@ -102,7 +102,7 @@ jobs:
           cd KernelSU
           patch -p1 < ksu/patches/0000-enable-susfs-for-ksu.patch
       - name: Build KSU kernel and log output
-        if: inputs.build == 'KSU' && inputs.action == 'build' && inputs.action == 'build'
+        if: inputs.build == 'KSU' && inputs.action == 'build' && inputs.goals == 'build'
         run: |
           mkdir -p out
           make O=out ARCH=$ARCH CC=$CC ${{ inputs.config }}
@@ -111,7 +111,7 @@ jobs:
           ./ksu/applyPatches.sh
           ./clang.sh | tee build.log
       - name: Make defconfig file
-        if: inputs.action == 'config'
+        if: inputs.goals == 'config'
         run: |
           mkdir -p out
           make O=out ARCH=$ARCH CC=$CC ${{ inputs.config }}
