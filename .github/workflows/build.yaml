@@ -119,7 +119,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: kernel
+          name: artifact
           path: |
             out/arch/arm64/boot/Image.gz
             out/arch/arm64/boot/Image.gz-dtb
