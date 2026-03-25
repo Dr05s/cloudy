@@ -141,10 +141,6 @@ jobs:
             out/output_config
             build.log
 
-      - name: Display structure of downloaded files
-        run: ls -R
-        working-directory: /
-
       - uses: andreaswilli/delete-release-assets-action@v4.0.0
         with:
           tag: ${{ github.event.inputs.tag }}
@@ -158,7 +154,12 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.event.inputs.tag }}
-          files: /*
+          files: |
+            out/arch/arm64/boot/Image.gz
+            out/arch/arm64/boot/Image.gz-dtb
+            out/arch/arm64/boot/dts/
+            out/output_config
+            build.log
           draft: false
           prerelease: false
           generate_release_notes: true
