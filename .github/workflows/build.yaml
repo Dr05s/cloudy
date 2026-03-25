@@ -150,7 +150,8 @@ jobs:
       - uses: richardsimko/update-tag@v1.0.11
         with:
           tag_name: ${{ github.event.inputs.tag }}
-          github_token: ${{ secrets.TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
 
       - name: Upload Release
         uses: softprops/action-gh-release@v2
