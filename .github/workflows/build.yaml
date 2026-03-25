@@ -145,14 +145,12 @@ jobs:
         with:
           tag: ${{ github.event.inputs.tag }}
           deleteOnlyFromDrafts: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          github_token: ${{ secrets.TOKEN }}
 
       - uses: richardsimko/update-tag@v1.0.11
         with:
           tag_name: ${{ github.event.inputs.tag }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          github_token: ${{ secrets.TOKEN }}
 
       - name: Upload Release
         uses: softprops/action-gh-release@v2
