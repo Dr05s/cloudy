@@ -158,11 +158,11 @@ jobs:
         with:
           tag_name: ${{ github.event.inputs.tag }}
           files: |
-            out/arch/arm64/boot/Image.gz
-            out/arch/arm64/boot/Image.gz-dtb
-            out/arch/arm64/boot/dts/
-            out/output_config
-            build.log
+            $(pwd)/out/arch/arm64/boot/Image.gz
+            $(pwd)/out/arch/arm64/boot/Image.gz-dtb
+            $(pwd)/out/arch/arm64/boot/dts/
+            $(pwd)/out/output_config
+            $(pwd)/build.log
           draft: false
           prerelease: false
           generate_release_notes: true
