@@ -57,6 +57,7 @@ on:
 
 jobs:
   build:
+    permissions: write-all
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
@@ -126,20 +127,6 @@ jobs:
             out/arch/arm64/boot/dts/
             out/output_config
             build.log
-  upload:
-    permissions: write-all
-    needs: [build]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/download-artifact@v4
-        with:
-          name: artifact
-          path: |
-            out/arch/arm64/boot/Image.gz
-            out/arch/arm64/boot/Image.gz-dtb
-            out/arch/arm64/boot/dts/
-            out/output_config
-            build.log
 
       - uses: andreaswilli/delete-release-assets-action@v4.0.0
         with:
@@ -158,11 +145,11 @@ jobs:
         with:
           tag_name: ${{ github.event.inputs.tag }}
           files: |
-            $(pwd)/out/arch/arm64/boot/Image.gz
-            $(pwd)/out/arch/arm64/boot/Image.gz-dtb
-            $(pwd)/out/arch/arm64/boot/dts/
-            $(pwd)/out/output_config
-            $(pwd)/build.log
+            out/arch/arm64/boot/Image.gz
+            out/arch/arm64/boot/Image.gz-dtb
+            out/arch/arm64/boot/dts/
+            out/output_config
+            build.log
           draft: false
           prerelease: false
           generate_release_notes: true
