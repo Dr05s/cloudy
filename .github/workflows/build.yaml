@@ -117,16 +117,9 @@ jobs:
           mkdir -p out
           make O=out ARCH=$ARCH CC=$CC ${{ inputs.config }}
           cp -af out/.config out/output_config
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: artifact
-          path: |
-            out/arch/arm64/boot/Image.gz
-            out/arch/arm64/boot/Image.gz-dtb
-            out/arch/arm64/boot/dts/
-            out/output_config
-            build.log
+      - name: Archive artifact
+        run: |
+          tar -czvf dts.tar.gz out/arch/arm64/boot/dts/
 
       - uses: andreaswilli/delete-release-assets-action@v4.0.0
         with:
@@ -147,7 +140,7 @@ jobs:
           files: |
             out/arch/arm64/boot/Image.gz
             out/arch/arm64/boot/Image.gz-dtb
-            out/arch/arm64/boot/dts/*.dtb
+            dts.tar.gz
             out/output_config
             build.log
           draft: false
