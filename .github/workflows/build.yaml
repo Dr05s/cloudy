@@ -95,7 +95,8 @@ jobs:
           ./prepare_compiler.sh ${{ inputs.gcc }} ${{ inputs.compression }}
       - name: apply custom kernel based root patch
         if: inputs.cmd !== ''
-        run: {{ inputs.cmd }}
+        run: |
+          {{ inputs.cmd }}
       - name: Build NonKSU kernel and log output
         if: inputs.build == 'NonKSU' && inputs.goals == 'build'
         run: |
