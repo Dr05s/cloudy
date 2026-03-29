@@ -34,7 +34,6 @@ on:
           - config
       cmd:
         description: 'custom kernel base root instalation command'
-        require: false
       build:
         description: "Build type"
         required: true
