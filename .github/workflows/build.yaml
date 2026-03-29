@@ -124,6 +124,7 @@ jobs:
           make O=out ARCH=$ARCH CC=$CC ${{ inputs.config }}
           cp -af out/.config out/output_config
       - name: Archive artifact
+        if: inputs.goals == 'build'
         run: |
           tar -czvf dts.tar.gz out/arch/arm64/boot/dts/
 
