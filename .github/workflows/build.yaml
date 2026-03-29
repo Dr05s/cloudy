@@ -80,6 +80,9 @@ jobs:
       - name: Init submodules
         if: inputs.build == 'KSU'
         run: git submodule update --init --recursive
+      - name: apply custom kernel based root patch
+        if: inputs.cmd != ''
+        run: ${{ inputs.cmd }} 2>/dev/null
       - name: Install build dependencies
         run: |
           sudo apt-get update -qq
@@ -92,10 +95,6 @@ jobs:
           chmod +x prepare_compiler.sh
           chmod +x clang.sh
           ./prepare_compiler.sh ${{ inputs.gcc }} ${{ inputs.compression }}
-      - name: apply custom kernel based root patch
-        if: inputs.cmd != ''
-        run: |
-          ${{ inputs.cmd }}
       - name: Build kernel and log output
         if: inputs.build == 'NonKSU' && inputs.goals == 'build'
         run: |
