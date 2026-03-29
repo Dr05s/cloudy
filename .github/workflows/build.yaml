@@ -95,7 +95,7 @@ jobs:
       - name: apply custom kernel based root patch
         if: inputs.cmd != ''
         run: |
-          {{ inputs.cmd }}
+          ${{ inputs.cmd }}
       - name: Build kernel and log output
         if: inputs.build == 'NonKSU' && inputs.goals == 'build'
         run: |
