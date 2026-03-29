@@ -96,19 +96,19 @@ jobs:
           chmod +x clang.sh
           ./prepare_compiler.sh ${{ inputs.gcc }} ${{ inputs.compression }}
       - name: Build kernel and log output
-        if: inputs.build == 'NonKSU' && inputs.goals == 'build'
+        if: inputs.build == 'NonKSU/Custom' && inputs.goals == 'build'
         run: |
           mkdir -p out
           make O=out ARCH=$ARCH CC=$CC ${{ inputs.config }}
           cp -af out/.config out/output_config
           ./clang.sh | tee build.log
       - name: Apply SUSFS patch
-        if: inputs.build == 'KSU' && inputs.susfs == 'Yes'
+        if: inputs.build == 'Builtin' && inputs.susfs == 'Yes'
         run: |
           cd KernelSU
           patch -p1 < ksu/patches/0000-enable-susfs-for-ksu.patch
       - name: Build KSU Builtin kernel and log output
-        if: inputs.build == 'KSU' && inputs.action == 'build' && inputs.goals == 'build'
+        if: inputs.build == 'Builtin' && inputs.goals == 'build'
         run: |
           mkdir -p out
           make O=out ARCH=$ARCH CC=$CC ${{ inputs.config }}
