@@ -32,6 +32,9 @@ on:
         options:
           - build
           - config
+      cmd:
+        description: 'custom kernel base root instalation command'
+        require: false
       build:
         description: "Build type"
         required: true
@@ -90,6 +93,9 @@ jobs:
           chmod +x prepare_compiler.sh
           chmod +x clang.sh
           ./prepare_compiler.sh ${{ inputs.gcc }} ${{ inputs.compression }}
+      - name: apply custom kernel based root patch
+        if: inputs.cmd !== ''
+        run: {{ inputs.cmd }}
       - name: Build NonKSU kernel and log output
         if: inputs.build == 'NonKSU' && inputs.goals == 'build'
         run: |
