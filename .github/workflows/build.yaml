@@ -94,7 +94,7 @@ jobs:
           chmod +x clang.sh
           ./prepare_compiler.sh ${{ inputs.gcc }} ${{ inputs.compression }}
       - name: apply custom kernel based root patch
-        if: inputs.cmd !== ''
+        if: inputs.cmd != ''
         run: |
           {{ inputs.cmd }}
       - name: Build NonKSU kernel and log output
