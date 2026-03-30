@@ -151,4 +151,4 @@ jobs:
             build.log
           draft: false
           prerelease: false
-          generate_release_notes: true
+          generate_release_notes: false
