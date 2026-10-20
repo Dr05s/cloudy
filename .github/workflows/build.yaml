@@ -33,23 +33,23 @@ on:
           - build
           - config
       cmd:
-        description: 'custom kernel base root instalation command'
+        description: 'custom ksu instalation command'
       build:
-        description: "KSU type"
+        description: "using our KSU Submodules"
         required: true
         type: choice
-        default: "NonKSU"
+        default: "no"
         options:
-          - NonKSU/Custom
-          - Builtin
+          - no
+          - yes
       susfs:
-        description: 'Using SUSFS?'
+        description: 'Patching SUSFS?'
         require: true
         type: choice
-        default: "No"
+        default: "no"
         options:
-          - No
-          - Yes
+          - no
+          - yes
     push:
       branches: 
         - main
@@ -78,7 +78,7 @@ jobs:
           fi
           mv kernel_dir/* ./
       - name: Init submodules
-        if: inputs.build == 'KSU'
+        if: inputs.build == 'yes'
         run: git submodule update --init --recursive
       - name: apply custom kernel based root patch
         if: inputs.cmd != ''
@@ -96,26 +96,21 @@ jobs:
           chmod +x clang.sh
           ./prepare_compiler.sh ${{ inputs.gcc }} ${{ inputs.compression }}
       - name: Build kernel and log output
-        if: inputs.build == 'NonKSU/Custom' && inputs.goals == 'build'
+        if: inputs.goals == 'build'
         run: |
           mkdir -p out
           make O=out ARCH=$ARCH CC=$CC ${{ inputs.config }}
+          if [ ${{inputs.build}} == 'yes' ]; then
+            chmod +x ksu/applyPatches.sh
+            ./ksu/applyPatches.sh
+          fi
           cp -af out/.config out/output_config
           ./clang.sh | tee build.log
       - name: Apply SUSFS patch
-        if: inputs.build == 'Builtin' && inputs.susfs == 'Yes'
+        if: inputs.susfs == 'yes'
         run: |
           cd KernelSU
           patch -p1 < ksu/patches/0000-enable-susfs-for-ksu.patch
-      - name: Build KSU Builtin kernel and log output
-        if: inputs.build == 'Builtin' && inputs.goals == 'build'
-        run: |
-          mkdir -p out
-          make O=out ARCH=$ARCH CC=$CC ${{ inputs.config }}
-          cp -af out/.config out/output_config
-          chmod +x ksu/applyPatches.sh
-          ./ksu/applyPatches.sh
-          ./clang.sh | tee build.log
       - name: Make defconfig file
         if: inputs.goals == 'config'
         run: |
